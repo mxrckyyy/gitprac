@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SnakeSense | Unmasking the World of Snakes</title>
+    <meta name="description"
+        content="Learn the truth about snakes, their anatomy, safety, and myths through an educational interactive experience." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        night: '#020817',
+                        forest: '#052e2b',
+                        emeraldsoft: '#10b981',
+                        moss: '#14532d',
+                        gold: '#fbbf24',
+                        slateglass: 'rgba(15, 23, 42, 0.72)'
+                    },
+                    boxShadow: {
+                        glow: '0 0 0 1px rgba(16,185,129,.35),0 25px 60px rgba(16,185,129,.18)'
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-deep: #020817;
+            --bg-panel: rgba(15, 23, 42, 0.72);
+            --bg-panel-strong: rgba(15, 23, 42, 0.9);
+            --emerald: #10b981;
+            --emerald-soft: #34d399;
+            --gold: #fbbf24;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --danger: #f87171;
+            --safe: #2dd4bf;
+            --shadow: rgba(0, 0, 0, 0.35);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top, rgba(16, 185, 129, 0.18), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(251, 191, 36, 0.10), transparent 35%),
+                #020817;
+            color: var(--text);
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 20px 40px rgba(2, 8, 23, 0.28);
+        }
+
+        .glass-strong {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .section-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+        }
+
+        .section-shell::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(251, 191, 36, 0.04));
+            pointer-events: none;
+        }
+
+        .snake-pattern {
+            background-image:
+                linear-gradient(rgba(16, 185, 129, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .page {
+            display: none;
+            animation: fadePage 0.38s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadePage {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border-radius: 9999px;
+            padding: 0.38rem 0.7rem;
+            font-size: 0.72rem;
+            letter-spacing: 0.03em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-low {
+            background: rgba(45, 212, 191, 0.12);
+            color: #99f6e4;
+        }
+
+        .badge-moderate {
+            background: rgba(251, 191, 36, 0.12);
+            color: #fde68a;
+        }
+
+        .badge-high {
+            background: rgba(248, 113, 113, 0.12);
+            color: #fca5a5;
+        }
+
+        .badge-extreme {
+            background: rgba(239, 68, 68, 0.18);
+            color: #fecaca;
+        }
+
+        .myth-card {
+            perspective: 1200px;
+            min-height: 260px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .myth-card .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 260px;
+            transition: transform 0.7s ease;
+            transform-style: preserve-3d;
+        }
+
+        .myth-card.is-flipped .inner {
+            transform: rotateY(180deg);
+        }
+
+        .myth-face {
+            position: absolute;
+            inset: 0;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+            box-shadow: 0 18px 30px rgba(2, 8, 23, 0.25);
+        }
+
+        .myth-face.back {
+            transform: rotateY(180deg);
+            background: linear-gradient(180deg, rgba(7, 89, 133, 0.35), rgba(5, 46, 43, 0.75));
+        }
+
+        .species-card {
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .species-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(16, 185, 129, 0.45);
+            box-shadow: 0 18px 30px rgba(2, 8, 23, 0.28);
+        }
+
+        .dot-pulse {
+            width: 10px;
+            height: 10px;
+            border-radius: 9999px;
+            display: inline-block;
+            background: #34d399;
+            box-shadow: 0 0 0 rgba(52, 211, 153, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 rgba(52, 211, 153, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(52, 211, 153, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+            }
+        }
+
+        .quiz-option {
+            transition: all 0.2s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: rgba(16, 185, 129, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.12);
+            border-color: rgba(16, 185, 129, 0.8);
+            color: #d1fae5;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(248, 113, 113, 0.12);
+            border-color: rgba(248, 113, 113, 0.7);
+            color: #fecaca;
+        }
+
+        .modal-backdrop {
+            background: rgba(2, 8, 23, 0.72);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .trait-content {
+            display: none;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .trait-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-btn.active {
+            background: rgba(16, 185, 129, 0.12);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #a7f3d0;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen antialiased">
+    <header class="sticky top-0 z-30 border-b border-slate-800/60 bg-slate-950/70 backdrop-blur-xl">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+            <button type="button" data-target="home"
+                class="nav-btn flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-900/60 px-2 py-2 text-left transition hover:border-emerald-400 hover:text-emerald-200">
+                <div
+                    class="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 shadow-glow">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <div>
+                    <p class="text-lg font-bold tracking-tight text-white">SnakeSense</p>
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Myth to Mastery</p>
+                </div>
+            </button>
+
+            <nav class="hidden items-center gap-3 md:flex">
+                <button type="button" data-target="home"
+                    class="nav-btn rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-sm text-slate-200 transition hover:border-emerald-400 hover:text-emerald-200">Home</button>
+                <button type="button" data-target="myths"
+                    class="nav-btn rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-sm text-slate-200 transition hover:border-emerald-400 hover:text-emerald-200">Myths</button>
+                <button type="button" data-target="species"
+                    class="nav-btn rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-sm text-slate-200 transition hover:border-emerald-400 hover:text-emerald-200">Species</button>
+                <button type="button" data-target="anatomy"
+                    class="nav-btn rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-sm text-slate-200 transition hover:border-emerald-400 hover:text-emerald-200">Anatomy</button>
+                <button type="button" data-target="quiz"
+                    class="nav-btn rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-sm text-slate-200 transition hover:border-emerald-400 hover:text-emerald-200">Quiz</button>
+                <button type="button" data-target="safety"
+                    class="nav-btn rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-sm text-slate-200 transition hover:border-emerald-400 hover:text-emerald-200">Safety</button>
+            </nav>
+
+            <button type="button" data-target="species"
+                class="nav-btn rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-200 transition hover:bg-emerald-500/20">Explore</button>
+        </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-4 pb-20 pt-8 sm:px-6 lg:px-8">
+        <section class="page active" data-page="home">
+            <div class="section-shell glass snake-pattern rounded-[2rem] p-6 sm:p-8 lg:p-12">
+                <div class="grid items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+                    <div class="relative z-10">
+                        <div
+                            class="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-200">
+                            <span class="dot-pulse"></span>
+                            Snake education & safety
+                        </div>
+
+                        <h1 class="max-w-xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+                            Unmasking the World of Snakes
+                        </h1>
+
+                        <p class="mt-5 max-w-xl text-lg leading-8 text-slate-300">
+                            Understanding snakes is not about fear — it is about respect, ecosystem balance, and better
+                            decision-making. Most myths are built from misunderstanding, not reality.
+                        </p>
+
+                        <div class="mt-8 flex flex-wrap gap-4">
+                            <button type="button" data-target="species"
+                                class="nav-btn inline-flex items-center gap-2 rounded-full bg-emerald-500 px-6 py-3 text-sm font-bold text-slate-950 shadow-glow transition hover:bg-emerald-400">
+                                Explore Snake Types
+                                <i data-lucide="arrow-right"></i>
+                            </button>
+                            <button type="button" data-target="quiz"
+                                class="nav-btn inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/75 px-6 py-3 text-sm font-bold text-white transition hover:border-emerald-400 hover:text-emerald-200">
+                                Take the Myth-Buster Quiz
+                                <i data-lucide="sparkles"></i>
+                            </button>
+                        </div>
+
+                        <div class="mt-10 grid gap-4 sm:grid-cols-3">
+                            <div class="glass rounded-2xl p-4">
+                                <p class="text-2xl font-black text-white">3,000+</p>
+                                <p class="mt-1 text-sm text-slate-300">snake species worldwide</p>
+                            </div>
+                            <div class="glass rounded-2xl p-4">
+                                <p class="text-2xl font-black text-white">90%</p>
+                                <p class="mt-1 text-sm text-slate-300">are non-venomous to humans</p>
+                            </div>
+                            <div class="glass rounded-2xl p-4">
+                                <p class="text-2xl font-black text-white">1 truth</p>
+                                <p class="mt-1 text-sm text-slate-300">at a time reduces fear</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative z-10">
+                        <div
+                            class="glass-strong relative overflow-hidden rounded-[2rem] border border-emerald-500/25 p-4 shadow-glow">
+                            <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=900&q=80"
+                                alt="A coiled snake in a natural habitat"
+                                class="h-[460px] w-full rounded-[1.4rem] object-cover" />
+                            <div
+                                class="absolute bottom-8 left-8 right-8 rounded-2xl border border-white/10 bg-slate-950/65 p-4 backdrop-blur-md">
+                                <div class="flex items-center justify-between gap-3">
+                                    <div>
+                                        <p class="text-xs uppercase tracking-[0.25em] text-emerald-200">Nature fact</p>
+                                        <p class="mt-2 text-lg font-bold text-white">Snakes help control rodents and
+                                            maintain ecosystem balance.</p>
+                                    </div>
+                                    <div
+                                        class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+                                        <i data-lucide="leaf"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" data-page="myths">
+            <div class="mt-4">
+                <div class="mb-8 flex items-end justify-between gap-4">
+                    <div>
+                        <p class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300">Myth vs. fact</p>
+                        <h2 class="mt-2 text-3xl font-black text-white">Common misconceptions, covered.</h2>
+                    </div>
+                </div>
+
+                <div class="grid gap-5 md:grid-cols-3">
+                    <div class="myth-card" data-myth>
+                        <div class="inner">
+                            <div class="myth-face front p-6">
+                                <div class="flex items-center justify-between">
+                                    <span class="badge badge-moderate">Myth</span>
+                                    <i data-lucide="help-circle" class="text-amber-300"></i>
+                                </div>
+                                <div class="mt-7">
+                                    <p class="text-sm uppercase tracking-[0.25em] text-slate-400">Are all snakes slimy?
+                                    </p>
+                                    <h3 class="mt-4 text-2xl font-bold text-white">Most snakes feel dry and smooth.</h3>
+                                </div>
+                                <div class="mt-8">
+                                    <button
+                                        class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-sm font-semibold text-emerald-200">
+                                        Reveal truth
+                                        <i data-lucide="rotate-cw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="myth-face back p-6">
+                                <div class="flex items-center justify-between">
+                                    <span class="badge badge-low">Fact</span>
+                                    <i data-lucide="check-circle-2" class="text-emerald-300"></i>
+                                </div>
+                                <div class="mt-7">
+                                    <p class="text-sm uppercase tracking-[0.25em] text-emerald-200">Reality</p>
+                                    <h3 class="mt-4 text-2xl font-bold text-white">Snake skin is usually dry, scaled,
+                                        and sleek.</h3>
+                                </div>
+                                <p class="mt-4 text-sm leading-7 text-slate-200">
+                                    The “slimy” idea comes from wet or muddy conditions or from confusion with
+                                    amphibians like frogs and salamanders.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="myth-card" data-myth>
+                        <div class="inner">
+                            <div class="myth-face front p-6">
+                                <div class="flex items-center justify-between">
+                                    <span class="badge badge-high">Myth</span>
+                                    <i data-lucide="shield-alert" class="text-rose-300"></i>
+                                </div>
+                                <div class="mt-7">
+                                    <p class="text-sm uppercase tracking-[0.25em] text-slate-400">Do all snakes bite?
+                                    </p>
+                                    <h3 class="mt-4 text-2xl font-bold text-white">Most snakes avoid confrontation.</h3>
+                                </div>
+                                <div class="mt-8">
+                                    <button
+                                        class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-sm font-semibold text-emerald-200">
+                                        Reveal truth
+                                        <i data-lucide="rotate-cw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="myth-face back p-6">
+                                <div class="flex items-center justify-between">
+                                    <span class="badge badge-low">Fact</span>
+                                    <i data-lucide="check-circle-2" class="text-emerald-300"></i>
+                                </div>
+                                <div class="mt-7">
+                                    <p class="text-sm uppercase tracking-[0.25em] text-emerald-200">Reality</p>
+                                    <h3 class="mt-4 text-2xl font-bold text-white">Most species prefer to flee or hide.
+                                    </h3>
+                                </div>
+                                <p class="mt-4 text-sm leading-7 text-slate-200">
+                                    Bites are usually defensive and happen when a snake feels trapped, startled, or
+                                    threatened.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="myth-card" data-myth>
+                        <div class="inner">
+                            <div class="myth-face front p-6">
+                                <div class="flex items-center justify-between">
+                                    <span class="badge badge-moderate">Myth</span>
+                                    <i data-lucide="flask-conical" class="text-amber-300"></i>
+                                </div>
+                                <div class="mt-7">
+                                    <p class="text-sm uppercase tracking-[0.25em] text-slate-400">Poisonous vs.
+                                        venomous?</p>
+                                    <h3 class="mt-4 text-2xl font-bold text-white">They are not the same thing.</h3>
+                                </div>
+                                <div class="mt-8">
+                                    <button
+                                        class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-sm font-semibold text-emerald-200">
+                                        Reveal truth
+                                        <i data-lucide="rotate-cw"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="myth-face back p-6">
+                                <div class="flex items-center justify-between">
+                                    <span class="badge badge-low">Fact</span>
+                                    <i data-lucide="check-circle-2" class="text-emerald-300"></i>
+                                </div>
+                                <div class="mt-7">
+                                    <p class="text-sm uppercase tracking-[0.25em] text-emerald-200">Reality</p>
+                                    <h3 class="mt-4 text-2xl font-bold text-white">Venomous animals inject toxins;
+                                        poisonous ones are toxic to eat or touch.</h3>
+                                </div>
+                                <p class="mt-4 text-sm leading-7 text-slate-200">
+                                    Snakes are typically described as venomous because they inject venom through
+                                    specialized glands and fangs.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" data-page="species">
+            <div class="mt-4">
+                <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300">Species explorer
+                        </p>
+                        <h2 class="mt-2 text-3xl font-black text-white">Find the snakes behind the myths.</h2>
+                    </div>
+                    <div class="flex flex-wrap gap-2" id="filterButtons">
+                        <button
+                            class="filter-btn active rounded-full border border-emerald-500/35 bg-emerald-500/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-emerald-200"
+                            data-filter="all">All</button>
+                        <button
+                            class="filter-btn rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-200 hover:border-emerald-400 hover:text-emerald-200"
+                            data-filter="Venomous">Venomous</button>
+                        <button
+                            class="filter-btn rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-200 hover:border-emerald-400 hover:text-emerald-200"
+                            data-filter="Non-Venomous">Non-Venomous</button>
+                        <button
+                            class="filter-btn rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-200 hover:border-emerald-400 hover:text-emerald-200"
+                            data-filter="Pet-Friendly">Pet-Friendly</button>
+                        <button
+                            class="filter-btn rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-200 hover:border-emerald-400 hover:text-emerald-200"
+                            data-filter="Giant Constrictors">Giant Constrictors</button>
+                    </div>
+                </div>
+
+                <div id="speciesGrid" class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"></div>
+            </div>
+        </section>
+
+        <section class="page" data-page="anatomy">
+            <div class="mt-4">
+                <div class="mb-8">
+                    <p class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300">Anatomy</p>
+                    <h2 class="mt-2 text-3xl font-black text-white">Built for survival: key adaptations.</h2>
+                </div>
+
+                <div class="glass section-shell rounded-[2rem] p-5 sm:p-6">
+                    <div class="mb-6 flex flex-wrap gap-2">
+                        <button
+                            class="trait-tab active rounded-full border border-emerald-500/40 bg-emerald-500/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-emerald-200"
+                            data-trait="pits">Heat-sensing pits</button>
+                        <button
+                            class="trait-tab rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-slate-200 hover:border-emerald-400 hover:text-emerald-200"
+                            data-trait="jaw">Flexible jaws</button>
+                        <button
+                            class="trait-tab rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-slate-200 hover:border-emerald-400 hover:text-emerald-200"
+                            data-trait="camouflage">Camouflage</button>
+                        <button
+                            class="trait-tab rounded-full border border-slate-700 bg-slate-900/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-slate-200 hover:border-emerald-400 hover:text-emerald-200"
+                            data-trait="rattle">Rattle mechanism</button>
+                    </div>
+
+                    <div id="traitPanels">
+                        <div class="trait-content active grid gap-6 lg:grid-cols-[0.8fr_1.2fr]" data-trait="pits">
+                            <div class="overflow-hidden rounded-[1.5rem] border border-emerald-500/20">
+                                <img src="https://images.unsplash.com/photo-1583212292454-1fe6229603b7?auto=format&fit=crop&w=1200&q=80"
+                                    alt="A snake in natural settings"
+                                    class="h-full min-h-[280px] w-full object-cover" />
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <p class="text-sm uppercase tracking-[0.2em] text-emerald-300">Heat-sensing pits</p>
+                                <h3 class="mt-3 text-3xl font-black text-white">Infrared vision helps predators track
+                                    warm-blooded prey.</h3>
+                                <p class="mt-4 max-w-xl text-base leading-8 text-slate-300">
+                                    Pit vipers and some pythons use heat-sensitive organs to detect temperature
+                                    differences in the environment. This helps them locate prey even in low light and
+                                    detect whether a target is nearby.
+                                </p>
+                                <ul class="mt-5 space-y-3 text-slate-200">
+                                    <li class="flex items-start gap-3"><i data-lucide="check"
+                                            class="mt-1 h-4 w-4 text-emerald-300"></i><span>Helps locate warm mammals
+                                            like mice and birds at night.</span></li>
+                                    <li class="flex items-start gap-3"><i data-lucide="check"
+                                            class="mt-1 h-4 w-4 text-emerald-300"></i><span>Improves hunting precision
+                                            in forests, caves, and near water.</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="trait-content grid gap-6 lg:grid-cols-[0.8fr_1.2fr]" data-trait="jaw">
+                            <div class="overflow-hidden rounded-[1.5rem] border border-emerald-500/20">
+                                <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1200&q=80"
+                                    alt="Close-up of a snake head and mouth"
+                                    class="h-full min-h-[280px] w-full object-cover" />
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <p class="text-sm uppercase tracking-[0.2em] text-emerald-300">Flexible jaw</p>
+                                <h3 class="mt-3 text-3xl font-black text-white">A modular skull allows huge meals and
+                                    powerful swallowing.</h3>
+                                <p class="mt-4 max-w-xl text-base leading-8 text-slate-300">
+                                    Snake jaws are not fused together like ours. Many bones are linked by flexible
+                                    ligaments, allowing the mouth to open wide and stretch around prey much larger than
+                                    the head itself.
+                                </p>
+                                <ul class="mt-5 space-y-3 text-slate-200">
+                                    <li class="flex items-start gap-3"><i data-lucide="check"
+                                            class="mt-1 h-4 w-4 text-emerald-300"></i><span>Can consume prey larger than
+                                            their own head circumference.</span></li>
+                                    <li class="flex items-start gap-3"><i data-lucide="check"
+                                            class="mt-1 h-4 w-4 text-emerald-300"></i><span>This adaptation helps them
+                                            survive on infrequent, high-energy meals.</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="trait-content grid gap-6 lg:grid-cols-[0.8fr_1.2fr]" data-trait="camouflage">
+                            <div class="overflow-hidden rounded-[1.5rem] border border-emerald-500/20">
+                                <img src="https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=1200&q=80"
+                                    alt="Camouflaged snake resting among leaves"
+                                    class="h-full min-h-[280px] w-full object-cover" />
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <p class="text-sm uppercase tracking-[0.2em] text-emerald-300">Camouflage</p>
+                                <h3 class="mt-3 text-3xl font-black text-white">Pattern and color help snakes vanish
+                                    into their surroundings.</h3>
+                                <p class="mt-4 max-w-xl text-base leading-8 text-slate-300">
+                                    Many snake species rely on mottled scales, stripes, and earth-tone coloration to
+                                    disappear in leaves, bark, sand, or grass. Camouflage helps both hunting and
+                                    avoiding larger predators.
+                                </p>
+                                <ul class="mt-5 space-y-3 text-slate-200">
+                                    <li class="flex items-start gap-3"><i data-lucide="check"
+                                            class="mt-1 h-4 w-4 text-emerald-300"></i><span>Increases hunting success by
+                                            making ambush less obvious.</span></li>
+                                    <li class="flex items-start gap-3"><i data-lucide="check"
+                                            class="mt-1 h-4 w-4 text-emerald-300"></i><span>Protects them from hawks,
+                                            big cats, and other rainforest threats.</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="trait-content grid gap-6 lg:grid-cols-[0.8fr_1.2fr]" data-trait="rattle">
+                            <div class="overflow-hidden rounded-[1.5rem] border border-emerald-500/20">
+                                <img src="https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=1200&q=80"
+                                    alt="Rattlesnake tail close-up" class="h-full min-h-[280px] w-full object-cover" />
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <p class="text-sm uppercase tracking-[0.2em] text-emerald-300">Rattle mechanism</p>
+                                <h3 class="mt-3 text-3xl font-black text-white">A warning system designed to reduce
+                                    dangerous encounters.</h3>
+                                <p class="mt-4 max-w-xl text-base leading-8 text-slate-300">
+                                    Rattlesnakes vibrate specialized keratin segments at the tail tip to create a
+                                    warning sound. It is often a warning before striking and is most effective when the
+                                    snake feels threatened before contact.
+                                </p>
+                                <ul class="mt-5 space-y-3 text-slate-200">
+                                    <li class="flex items-start gap-3"><i data-lucide="check"
+                                            class="mt-1 h-4 w-4 text-emerald-300"></i><span>Serves as a non-lethal
+                                            warning to large mammals and humans.</span></li>
+                                    <li class="flex items-start gap-3"><i data-lucide="check"
+                                            class="mt-1 h-4 w-4 text-emerald-300"></i><span>Best understood as a
+                                            behavior that reduces conflict, not a sign of aggression.</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" data-page="quiz">
+            <div class="mt-4">
+                <div class="mb-8">
+                    <p class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300">Myth-buster quiz</p>
+                    <h2 class="mt-2 text-3xl font-black text-white">Think you know snakes? Put your knowledge to the
+                        test.</h2>
+                </div>
+
+                <div class="glass section-shell rounded-[2rem] p-5 sm:p-8">
+                    <div id="quizCard" class="rounded-[1.5rem] border border-slate-800 bg-slate-950/50 p-6">
+                        <div id="quizHeader" class="mb-6 flex items-center justify-between gap-4">
+                            <h3 class="text-xl font-bold text-white">Question <span id="questionIndex">1</span> / <span
+                                    id="totalQuestions">4</span></h3>
+                            <div
+                                class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm font-semibold text-emerald-200">
+                                Score: <span id="scoreValue">0</span>
+                            </div>
+                        </div>
+
+                        <div id="quizQuestion" class="text-2xl font-bold leading-relaxed text-white"></div>
+
+                        <div id="quizOptions" class="mt-6 space-y-3"></div>
+
+                        <div id="quizFeedback"
+                            class="mt-6 hidden rounded-2xl border border-slate-700 bg-slate-900/70 p-4 text-sm text-slate-200">
+                        </div>
+
+                        <div class="mt-6 flex items-center justify-between">
+                            <button id="nextQuestionBtn"
+                                class="hidden rounded-full bg-emerald-500 px-6 py-3 text-sm font-bold text-slate-950 transition hover:bg-emerald-400">
+                                Next
+                            </button>
+                            <div id="quizResult"
+                                class="hidden w-full rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5">
+                                <p class="text-xs uppercase tracking-[0.25em] text-emerald-200">Final result</p>
+                                <h4 id="resultTitle" class="mt-3 text-2xl font-black text-white"></h4>
+                                <p id="resultSummary" class="mt-3 text-base text-slate-200"></p>
+                                <button id="restartQuizBtn"
+                                    class="mt-5 rounded-full border border-emerald-500/40 bg-slate-950/50 px-5 py-2 text-sm font-bold text-emerald-200 transition hover:border-emerald-300 hover:text-emerald-100">
+                                    Restart Quiz
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" data-page="safety">
+            <div class="mt-4">
+                <div class="mb-8">
+                    <p class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300">Safety guide</p>
+                    <h2 class="mt-2 text-3xl font-black text-white">What to do when you encounter a snake.</h2>
+                </div>
+
+                <div class="grid gap-6 lg:grid-cols-2">
+                    <div class="rounded-[1.5rem] border border-emerald-500/25 bg-emerald-500/10 p-6">
+                        <div class="mb-5 flex items-center gap-3">
+                            <div
+                                class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+                            <h3 class="text-2xl font-black text-white">Do</h3>
+                        </div>
+                        <ul class="space-y-4 text-slate-100">
+                            <li class="flex items-start gap-3"><i data-lucide="check-circle-2"
+                                    class="mt-1 h-5 w-5 text-emerald-300"></i><span>Stay calm and give the snake space
+                                    to move away.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="check-circle-2"
+                                    class="mt-1 h-5 w-5 text-emerald-300"></i><span>Keep children and pets at a safe
+                                    distance.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="check-circle-2"
+                                    class="mt-1 h-5 w-5 text-emerald-300"></i><span>Watch where you step and wear secure
+                                    footwear outdoors.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="check-circle-2"
+                                    class="mt-1 h-5 w-5 text-emerald-300"></i><span>If bitten, seek emergency medical
+                                    care immediately and try to remember the snake’s appearance from a safe
+                                    distance.</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="rounded-[1.5rem] border border-rose-500/25 bg-rose-500/10 p-6">
+                        <div class="mb-5 flex items-center gap-3">
+                            <div
+                                class="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-500/15 text-rose-300">
+                                <i data-lucide="octagon-x"></i>
+                            </div>
+                            <h3 class="text-2xl font-black text-white">Don't</h3>
+                        </div>
+                        <ul class="space-y-4 text-slate-100">
+                            <li class="flex items-start gap-3"><i data-lucide="x-circle"
+                                    class="mt-1 h-5 w-5 text-rose-300"></i><span>Do not try to handle, trap, or provoke
+                                    the snake.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="x-circle"
+                                    class="mt-1 h-5 w-5 text-rose-300"></i><span>Do not cut the wound or suck out
+                                    venom.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="x-circle"
+                                    class="mt-1 h-5 w-5 text-rose-300"></i><span>Do not apply a tourniquet or tight band
+                                    around the bitten limb.</span></li>
+                            <li class="flex items-start gap-3"><i data-lucide="x-circle"
+                                    class="mt-1 h-5 w-5 text-rose-300"></i><span>Do not wait for symptoms to
+                                    worsen—prompt medical attention matters most.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-950/60">
+        <div
+            class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-slate-400 sm:flex-row sm:px-6 lg:px-8">
+            <p>© 2026 SnakeSense. Educational purpose only.</p>
+            <p>Information is for awareness and guidance—not a substitute for local emergency services or expert care.
+            </p>
+        </div>
+    </footer>
+
+    <div id="speciesModal" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+        <div class="glass-strong w-full max-w-3xl overflow-hidden rounded-[2rem] border border-slate-800">
+            <div class="flex items-center justify-between border-b border-slate-800 px-5 py-4">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.25em] text-emerald-300">Species profile</p>
+                </div>
+                <button id="closeModal"
+                    class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 text-slate-200 transition hover:border-emerald-400 hover:text-emerald-200">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <div class="grid gap-0 md:grid-cols-[0.95fr_1.05fr]">
+                <div class="h-full">
+                    <img id="modalImage" src="" alt="" class="h-full min-h-[280px] w-full object-cover" />
+                </div>
+                <div class="space-y-5 p-6">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <h3 id="modalName" class="text-3xl font-black text-white"></h3>
+                        <span id="modalDanger" class="badge"></span>
+                    </div>
+                    <p id="modalScientific" class="text-base italic text-emerald-200"></p>
+                    <p id="modalHabitat" class="text-sm text-slate-300"></p>
+
+                    <div id="modalTags" class="flex flex-wrap gap-2"></div>
+
+                    <p id="modalDescription" class="text-base leading-7 text-slate-300"></p>
+
+                    <div class="rounded-2xl border border-slate-700 bg-slate-900/60 p-4">
+                        <p class="text-xs uppercase tracking-[0.2em] text-slate-400">Quick facts</p>
+                        <ul id="modalFacts" class="mt-3 space-y-2 text-sm text-slate-200"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const species = [
+            {
+                id: 1,
+                name: "King Cobra",
+                scientificName: "Ophiophagus hannah",
+                habitat: "Dense forests and wetlands across South and Southeast Asia",
+                tags: ["Venomous"],
+                danger: "High",
+                image: "https://images.unsplash.com/photo-1598335614493-2f75f4d5f5f9?auto=format&fit=crop&w=900&q=80",
+                description: "The King Cobra is the largest venomous snake in the world and is famous for its hood and defensive posture. It prefers to avoid humans when possible and is highly alert in forested habitats.",
+                facts: [
+                    "Can raise up to one-third of its body off the ground when threatened.",
+                    "Feeds primarily on other snakes and sometimes small mammals.",
+                    "The venom can cause severe paralysis and requires urgent medical care."
+                ]
+            },
+            {
+                id: 2,
+                name: "Ball Python",
+                scientificName: "Python regius",
+                habitat: "Grasslands and forests of West and Central Africa",
+                tags: ["Non-Venomous", "Pet-Friendly"],
+                danger: "Low",
+                image: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=900&q=80",
+                description: "Ball pythons are calm, often shy, and known for curling into a tight ball when threatened. They are among the most widely kept snakes in captivity due to their manageable size and relatively docile temperament.",
+                facts: [
+                    "Usually stays still rather than striking when startled.",
+                    "Uses constriction to subdue prey such as small mammals.",
+                    "Often prefers warm, secure hiding places during the day."
+                ]
+            },
+            {
+                id: 3,
+                name: "Black Mamba",
+                scientificName: "Dendroaspis polylepis",
+                habitat: "Savannas, rocky outcrops, and open woodland of sub-Saharan Africa",
+                tags: ["Venomous"],
+                danger: "Extreme",
+                image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80",
+                description: "The Black Mamba is one of Africa’s most feared snakes, known for speed and potent venom. It usually avoids confrontation but can move quickly if cornered or startled.",
+                facts: [
+                    "Its name comes from the dark interior of its mouth, not its skin color.",
+                    "Can move with surprising speed on open ground.",
+                    "Venom can cause neurotoxicity and requires emergency care."
+                ]
+            },
+            {
+                id: 4,
+                name: "Corn Snake",
+                scientificName: "Pantherophis guttatus",
+                habitat: "Fields, forests, and rocky areas across the southeastern United States",
+                tags: ["Non-Venomous", "Pet-Friendly"],
+                danger: "Low",
+                image: "https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=900&q=80",
+                description: "Corn snakes are mild-tempered and visually striking, often with colorful patterns that mimic other species. They are excellent examples of how non-venomous snakes can still be fascinating and adaptable.",
+                facts: [
+                    "Named for the pattern that looks like kernels of corn on their scales.",
+                    "Excellent climbers and often found in barns or abandoned structures.",
+                    "Common in the pet trade because of their manageable size and calm nature."
+                ]
+            },
+            {
+                id: 5,
+                name: "Green Anaconda",
+                scientificName: "Eunectes murinus",
+                habitat: "Swamps, marshes, and slow-moving rivers of South America",
+                tags: ["Giant Constrictors", "Non-Venomous"],
+                danger: "High",
+                image: "https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=900&q=80",
+                description: "Green anacondas are among the heaviest snakes in the world, adapted for aquatic ambush hunting. They are powerful constrictors that live in wet, dense habitats and are rarely seen by humans.",
+                facts: [
+                    "Can grow to immense lengths and weight, making them true giants.",
+                    "Spend much of their time in or near water.",
+                    "Constriction is used to subdue prey such as capybaras and deer."
+                ]
+            },
+            {
+                id: 6,
+                name: "Milk Snake",
+                scientificName: "Lampropeltis triangulum",
+                habitat: "Woodlands, grasslands, and rocky habitats across North America",
+                tags: ["Non-Venomous", "Pet-Friendly"],
+                danger: "Low",
+                image: "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=900&q=80",
+                description: "Milk snakes are brightly patterned and often mistaken for coral snakes, though they are harmless. Their bands and colors make them some of the most visually distinctive non-venomous species in the Americas.",
+                facts: [
+                    "They are often found near agricultural land and forest edges.",
+                    "Primarily feed on rodents, birds’ eggs, and lizards.",
+                    "Many species are strong climbers and active at night."
+                ]
+            }
+        ];
+
+        const pages = document.querySelectorAll('.page');
+        const navButtons = document.querySelectorAll('.nav-btn');
+
+        function showPage(target) {
+            pages.forEach(page => {
+                const isActive = page.dataset.page === target;
+                page.classList.toggle('active', isActive);
+            });
+
+            navButtons.forEach(button => {
+                const isActive = button.dataset.target === target;
+                button.classList.toggle('active', isActive);
+            });
+
+            if (window.innerWidth < 768) {
+                // mobile - keep nav visible as button group
+            }
+
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const target = button.dataset.target;
+                if (target) showPage(target);
+            });
+        });
+
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const speciesGrid = document.getElementById('speciesGrid');
+        const modal = document.getElementById('speciesModal');
+        const modalName = document.getElementById('modalName');
+        const modalScientific = document.getElementById('modalScientific');
+        const modalHabitat = document.getElementById('modalHabitat');
+        const modalTags = document.getElementById('modalTags');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalFacts = document.getElementById('modalFacts');
+        const modalDanger = document.getElementById('modalDanger');
+        const modalImage = document.getElementById('modalImage');
+
+        let activeFilter = 'all';
+
+        function renderBadgeClass(danger) {
+            const value = danger.toLowerCase();
+            if (value === 'low') return 'badge-low';
+            if (value === 'moderate') return 'badge-moderate';
+            if (value === 'high') return 'badge-high';
+            if (value === 'extreme') return 'badge-extreme';
+            return 'badge-moderate';
+        }
+
+        function renderSpeciesGrid() {
+            let filteredSpecies = species.filter(item => {
+                if (activeFilter === 'all') return true;
+                return item.tags.includes(activeFilter);
+            });
+
+            speciesGrid.innerHTML = filteredSpecies.map(item => `
+        <article class="species-card glass section-shell overflow-hidden rounded-[1.6rem] border border-slate-800">
+          <div class="relative">
+            <img src="${item.image}" alt="${item.name}" class="h-64 w-full object-cover" />
+            <div class="absolute left-4 top-4">
+              <span class="badge ${renderBadgeClass(item.danger)}">${item.danger}</span>
+            </div>
+          </div>
+
+          <div class="space-y-4 p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-2xl font-black text-white">${item.name}</h3>
+                <p class="text-sm italic text-emerald-200">${item.scientificName}</p>
+              </div>
+              <button class="open-modal flex h-11 w-11 items-center justify-center rounded-full border border-slate-700 bg-slate-900/60 text-slate-100 transition hover:border-emerald-400 hover:text-emerald-200" data-id="${item.id}" aria-label="Learn more about ${item.name}">
+                <i data-lucide="info"></i>
+              </button>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              ${item.tags.map(tag => `<span class="rounded-full border border-slate-700 bg-slate-900/70 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-200">${tag}</span>`).join('')}
+            </div>
+
+            <p class="text-sm text-slate-400"><span class="font-semibold text-slate-200">Habitat:</span> ${item.habitat}</p>
+
+            <p class="text-sm leading-7 text-slate-300">${item.description.slice(0, 120)}...</p>
+
+            <button class="open-modal inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-bold text-emerald-200 transition hover:bg-emerald-500/20" data-id="${item.id}">
+              Learn More
+              <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+        </article>
+      `).join('');
+
+            lucide.createIcons();
+            bindModalTriggers();
+        }
+
+        function bindModalTriggers() {
+            document.querySelectorAll('.open-modal').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = Number(button.dataset.id);
+                    const item = species.find(spec => spec.id === id);
+                    if (!item) return;
+
+                    modalName.textContent = item.name;
+                    modalScientific.textContent = item.scientificName;
+                    modalHabitat.textContent = `Habitat: ${item.habitat}`;
+                    modalDescription.textContent = item.description;
+                    modalDanger.textContent = item.danger;
+                    modalDanger.className = `badge ${renderBadgeClass(item.danger)}`;
+                    modalImage.src = item.image;
+                    modalImage.alt = item.name;
+
+                    modalTags.innerHTML = item.tags.map(tag => `
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-200">${tag}</span>
+          `).join('');
+
+                    modalFacts.innerHTML = item.facts.map(fact => `
+            <li class="flex items-start gap-2"><i data-lucide="chevron-right" class="mt-0.5 h-4 w-4 text-emerald-300"></i><span>${fact}</span></li>
+          `).join('');
+
+                    lucide.createIcons();
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                });
+            });
+        }
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                activeFilter = button.dataset.filter;
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'border-emerald-500/35', 'bg-emerald-500/15', 'text-emerald-200');
+                    btn.classList.add('border-slate-700', 'bg-slate-900/70', 'text-slate-200');
+                });
+
+                button.classList.add('active', 'border-emerald-500/35', 'bg-emerald-500/15', 'text-emerald-200');
+                button.classList.remove('border-slate-700', 'bg-slate-900/70', 'text-slate-200');
+
+                renderSpeciesGrid();
+            });
+        });
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        });
+
+        document.querySelectorAll('[data-myth]').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('is-flipped');
+            });
+        });
+
+        document.querySelectorAll('.trait-tab').forEach(button => {
+            button.addEventListener('click', () => {
+                const target = button.dataset.trait;
+
+                document.querySelectorAll('.trait-tab').forEach(tab => {
+                    tab.classList.remove('active', 'border-emerald-500/40', 'bg-emerald-500/15', 'text-emerald-200');
+                    tab.classList.add('border-slate-700', 'bg-slate-900/70', 'text-slate-200');
+                });
+
+                button.classList.add('active', 'border-emerald-500/40', 'bg-emerald-500/15', 'text-emerald-200');
+                button.classList.remove('border-slate-700', 'bg-slate-900/70', 'text-slate-200');
+
+                document.querySelectorAll('.trait-content').forEach(panel => {
+                    panel.classList.toggle('active', panel.dataset.trait === target);
+                });
+            });
+        });
+
+        const quizQuestions = [
+            {
+                question: "Which statement is true about snakes and their skin?",
+                options: [
+                    "All snakes feel slimy and wet to the touch.",
+                    "Most snakes have dry, scaled skin that helps minimize water loss.",
+                    "Snake skin is permanently soft and rubbery.",
+                    "Only venomous snakes have scales."
+                ],
+                answer: 1,
+                explanation: "Snakes are covered in dry scales rather than a slimy skin. Their scales help protect them and support movement on land."
+            },
+            {
+                question: "Why do some snakes use heat-sensing pits?",
+                options: [
+                    "To make their skin glow in the dark.",
+                    "To detect warm-blooded prey in low-light conditions.",
+                    "To attract mates with infrared sounds.",
+                    "To breathe underwater."
+                ],
+                answer: 1,
+                explanation: "Heat-sensing pits detect infrared radiation from warm-bodied animals, helping snakes locate prey in darkness."
+            },
+            {
+                question: "What is a key difference between venomous and poisonous animals?",
+                options: [
+                    "Venomous animals inject toxins; poisonous animals are toxic to eat or touch.",
+                    "Poisonous animals always have fangs.",
+                    "Venomous animals are always non-venomous when young.",
+                    "There is no difference."
+                ],
+                answer: 0,
+                explanation: "Venomous animals inject toxins, while poisonous species are harmful to touch or consume. The difference matters in both biology and first aid."
+            },
+            {
+                question: "What should you do if you encounter a snake outdoors?",
+                options: [
+                    "Approach it to take a photo from close range.",
+                    "Panic and run quickly through tall grass.",
+                    "Give it space and back away calmly.",
+                    "Attempt to pick it up to relocate it."
+                ],
+                answer: 2,
+                explanation: "Most snakes prefer to avoid people. Staying calm and creating distance is the safest, most responsible approach."
+            }
+        ];
+
+        const quizQuestion = document.getElementById('quizQuestion');
+        const quizOptions = document.getElementById('quizOptions');
+        const quizFeedback = document.getElementById('quizFeedback');
+        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+        const questionIndexEl = document.getElementById('questionIndex');
+        const totalQuestionsEl = document.getElementById('totalQuestions');
+        const scoreValueEl = document.getElementById('scoreValue');
+        const quizResult = document.getElementById('quizResult');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultSummary = document.getElementById('resultSummary');
+        const restartQuizBtn = document.getElementById('restartQuizBtn');
+
+        let quizState = {
+            currentQuestion: 0,
+            score: 0,
+            answered: false
+        };
+
+        function renderQuiz() {
+            const q = quizQuestions[quizState.currentQuestion];
+            questionIndexEl.textContent = quizState.currentQuestion + 1;
+            totalQuestionsEl.textContent = quizQuestions.length;
+            scoreValueEl.textContent = quizState.score;
+
+            quizQuestion.textContent = q.question;
+            quizOptions.innerHTML = q.options.map((option, index) => `
+        <button class="quiz-option w-full rounded-2xl border border-slate-700 bg-slate-900/70 p-4 text-left text-base font-medium text-slate-100" data-index="${index}">
+          ${String.fromCharCode(65 + index)}. ${option}
+        </button>
+      `).join('');
+
+            quizFeedback.classList.add('hidden');
+            quizFeedback.textContent = '';
+            nextQuestionBtn.classList.add('hidden');
+
+            document.querySelectorAll('.quiz-option').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (quizState.answered) return;
+                    quizState.answered = true;
+
+                    const selectedIndex = Number(button.dataset.index);
+                    const isCorrect = selectedIndex === q.answer;
+
+                    document.querySelectorAll('.quiz-option').forEach(btn => {
+                        btn.disabled = true;
+                        btn.classList.remove('correct', 'incorrect');
+                        const idx = Number(btn.dataset.index);
+                        if (idx === q.answer) btn.classList.add('correct');
+                        if (idx === selectedIndex && !isCorrect) btn.classList.add('incorrect');
+                    });
+
+                    if (isCorrect) {
+                        quizState.score += 1;
+                        scoreValueEl.textContent = quizState.score;
+                    }
+
+                    quizFeedback.textContent = `${isCorrect ? 'Correct.' : 'Not quite.'} ${q.explanation}`;
+                    quizFeedback.classList.remove('hidden');
+
+                    nextQuestionBtn.classList.remove('hidden');
+                    nextQuestionBtn.textContent = quizState.currentQuestion === quizQuestions.length - 1 ? 'See Results' : 'Next';
+                });
+            });
+        }
+
+        nextQuestionBtn.addEventListener('click', () => {
+            if (!quizState.answered) return;
+
+            quizState.currentQuestion += 1;
+            quizState.answered = false;
+
+            if (quizState.currentQuestion < quizQuestions.length) {
+                renderQuiz();
+            } else {
+                const pct = Math.round((quizState.score / quizQuestions.length) * 100);
+                let title = 'Knowledge Builder';
+                let summary = `You scored ${quizState.score} out of ${quizQuestions.length}. You have a strong grasp of snake basics and can keep fear in check with facts.`;
+
+                if (pct === 100) {
+                    title = 'Snake Savant!';
+                    summary = `Perfect score! You clearly understand how snakes behave and why evidence-based education matters.`;
+                } else if (pct >= 75) {
+                    title = 'Myth-Buster Pro';
+                    summary = `Excellent work. You scored ${quizState.score}/${quizQuestions.length}. You’re well on your way to replacing fear with understanding.`;
+                } else if (pct >= 50) {
+                    title = 'Great Start';
+                    summary = `You scored ${quizState.score}/${quizQuestions.length}. A little more learning can make a big difference in how you understand snakes.`;
+                }
+
+                resultTitle.textContent = title;
+                resultSummary.textContent = summary;
+
+                quizResult.classList.remove('hidden');
+                document.getElementById('quizCard').querySelector('#quizHeader').style.display = 'none';
+                quizQuestion.textContent = '';
+                quizOptions.innerHTML = '';
+                quizFeedback.classList.add('hidden');
+                nextQuestionBtn.classList.add('hidden');
+            }
+        });
+
+        restartQuizBtn.addEventListener('click', () => {
+            quizState = { currentQuestion: 0, score: 0, answered: false };
+            quizResult.classList.add('hidden');
+            document.getElementById('quizCard').querySelector('#quizHeader').style.display = 'flex';
+            renderQuiz();
+        });
+
+        renderSpeciesGrid();
+        renderQuiz();
+        showPage('home');
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
